@@ -75,8 +75,8 @@ export default function Home( { navigation }: Props ) {
    <View style={styles.container}>
         <View style={styles.headerTitle}>
             <View style={{marginTop: areaSegura.top, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10}}>
-                <Text style={{ fontFamily: 'Oswald_700Regular' , fontWeight: 'bold', color: Colors.Azul, fontSize: 20}}>Bem-Vindo, </Text>
-                <Text style={{ fontFamily: 'Oswald_400Regular' , fontWeight: 'bold', color: Colors.Azul, fontSize: 20}}>{usuario.nome}!</Text>
+                <Text style={{ fontFamily: 'Oswald_700Bold' , fontWeight: 'bold', color: Colors.Azul, fontSize: 20}}>Bem-Vindo, </Text>
+                <Text style={{ fontFamily: 'Oswald_700Bold' , fontWeight: 'bold', color: Colors.Azul, fontSize: 20}}>{usuario.nome}!</Text>
             </View>
             <TouchableOpacity style={{marginTop: areaSegura.top, paddingVertical: 10}}>
                 <MaterialCommunityIcons name='bell-outline' size={28} color={Colors.Azul} />
@@ -114,6 +114,11 @@ export default function Home( { navigation }: Props ) {
                             <MaterialCommunityIcons name="pillar" size={42} color={Colors.Verde} />
                             <Text style={{textAlign: 'center', padding: 5}}>Gerenciar Contas</Text>
                         </TouchableOpacity>
+                        
+                        <TouchableOpacity style={styles.optionsMenu}>
+                            <MaterialCommunityIcons name="account-question" size={42} color={Colors.Verde} />
+                            <Text style={{textAlign: 'center', padding: 5}}>Precisa de Ajuda?</Text>
+                        </TouchableOpacity>
 
                     </ScrollView>
 
@@ -134,6 +139,14 @@ export default function Home( { navigation }: Props ) {
                 style={{ marginTop: 10 }}
             />
 
+        </View>
+
+        <View style={{marginHorizontal: '5%', backgroundColor: Colors.Branco, paddingVertical: 10, borderRadius: 8}}>
+            <Text style={{marginHorizontal: '5%'}}>Limite de Crédito Especial:</Text>
+                <View style={{marginVertical: 30, alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
+                    <Text style={{fontSize: 14, color: '#b5b5b5b5', textAlign: 'center'}}>R$ </Text>
+                    <Text style={{textAlign: 'center', fontSize: 32, fontWeight: 'bold'}}>27.000</Text>
+                </View>
         </View>
 
 
