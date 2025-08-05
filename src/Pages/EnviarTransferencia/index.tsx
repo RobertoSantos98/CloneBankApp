@@ -1,19 +1,22 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { Colors } from '../../Utils/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 
 import LoadingScreen from '../../components/LoadingScreen'
+import { buscarUsuarioPorCpfOuEmail } from '../../Services/AuthService';
 
 export default function EnviarTransferencia() {
     const areaSegura = useSafeAreaInsets();
 
-    const [ step, setStep ] = useState(5);
+    const [ step, setStep ] = useState(3);
 
     const [emailCPF, setEmailCPF ] = useState('');
     const [ tipoContaPagador, setTipoContaPagador ] = useState('');
     const [ tipoContaRecebedor, settipoContaRecebedor ] = useState('');
     const [ valor, setValor ] = useState('');
+
+    const [ usuarioParaEnvio, setUsuarioParaEnvio ] = useState<any>();
 
     const Transferencia = {
         idPagador: "3fa85f64-5717-4562-b3",
@@ -24,13 +27,27 @@ export default function EnviarTransferencia() {
     }
 
     useEffect(() => {
-        if(['Empresarial', 'Pessoal'].includes(tipoContaPagador)){
+        if(['Empresarial', 'Pessoal'].includes(tipoContaRecebedor)){
             setStep(prev => prev + 1);
-            console.log(tipoContaPagador)
+            console.log(tipoContaRecebedor)
         }
     }, [tipoContaPagador]);
 
-    
+    const buscarCprOuEmail = async () => {
+        try{
+        const usuarioEncontradoParaEnvio = await buscarUsuarioPorCpfOuEmail(emailCPF);   
+        if(!usuarioEncontradoParaEnvio){
+            alert('Usuário não encontrado');
+            return;
+        } 
+        setUsuarioParaEnvio(usuarioEncontradoParaEnvio);
+        console.log(usuarioEncontradoParaEnvio);
+        setStep(2);
+
+        }catch(err){
+            console.log(err)
+        }
+    }
 
 
 
@@ -40,7 +57,7 @@ export default function EnviarTransferencia() {
         <>
             <Text style={{marginHorizontal: '5%'}} >Insira o email ou CPF da conta para enviar: </Text>
             <TextInput style={styles.input}/>
-            <TouchableOpacity style={[styles.btn, {bottom: areaSegura.bottom}]} onPress={() => setStep(2)}>
+            <TouchableOpacity style={[styles.btn, {bottom: areaSegura.bottom}]} onPress={buscarCprOuEmail}>
                 <Text style={styles.textBtn}>Próximo</Text>
             </TouchableOpacity>
         </>
@@ -49,12 +66,14 @@ export default function EnviarTransferencia() {
     {step ===2 && (
         <>
             <Text style={{marginHorizontal: '5%'}}>Escolha uma conta para Enviar</Text>
-            <TouchableOpacity style={[styles.input, {justifyContent: 'center'}]} onPress={() => setTipoContaPagador('Pessoal')}>
+            <TouchableOpacity style={[styles.input, {justifyContent: 'center'}]} onPress={() => settipoContaRecebedor('Pessoal')}>
                 <Text style={{textAlign: 'center', fontSize: 16}}>Pessoal</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.input, {justifyContent: 'center'}]} onPress={() => setTipoContaPagador('Empresarial')}>
-                <Text style={{textAlign: 'center', fontSize: 16}}>Empresarial</Text>
-            </TouchableOpacity>
+            {usuarioParaEnvio.contas > 0 && (
+                <TouchableOpacity style={[styles.input, {justifyContent: 'center'}]} onPress={() => settipoContaRecebedor('Empresarial')}>
+                    <Text style={{textAlign: 'center', fontSize: 16}}>Empresarial</Text>
+                </TouchableOpacity>
+            )}
         </>
     )}
     
@@ -62,9 +81,21 @@ export default function EnviarTransferencia() {
         <>
             <Text style={{marginHorizontal: '5%'}}>Quanto você quer enviar?</Text>
             <TextInput style={styles.input}/>
+
+            <Text style={{marginHorizontal: '5%'}}>Escolha uma conta para Enviar</Text>
+            <TouchableOpacity style={[styles.input, {justifyContent: 'center'}]} >
+                <Text style={{textAlign: 'center', fontSize: 16}}>Pessoal</Text>
+            </TouchableOpacity>
+            {usuarioParaEnvio.contas > 0 && (
+                <TouchableOpacity style={[styles.input, {justifyContent: 'center'}]} >
+                    <Text style={{textAlign: 'center', fontSize: 16}}>Empresarial</Text>
+                </TouchableOpacity>
+            )}
+
             <TouchableOpacity style={[styles.btn, {bottom: areaSegura.bottom}]} onPress={() => setStep(4)} >
                 <Text style={styles.textBtn}>Confirmar Valor</Text>
             </TouchableOpacity>
+
         </>
     )}
     

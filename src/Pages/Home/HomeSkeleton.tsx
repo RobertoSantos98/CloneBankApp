@@ -1,96 +1,20 @@
-import { View, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList} from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import { Colors } from '../../Utils/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigation/StackNavigator';
-import { useState, useEffect  } from 'react';
 
-import HomeSkeleton from './HomeSkeleton';
-import { BuscarUsuario } from '../../Services/UsuarioService';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+import Skeleton from '../../components/Skeleton';
 
-export default function Home( { navigation }: Props ) {
+export default function HomeSkeleton( ) {
     const areaSegura = useSafeAreaInsets();
 
-    const [ loading, setLoading ] = useState(true);
-    const [ usuario, setUsuario ] = useState<any>(null);
-
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         setLoading(false)
-    //     },3000);
-
-    //     return () => clearTimeout(timer);
-    // }, [])
-
-    useEffect(() => {
-        buscarUsuario();
-    },[])
-
-    const buscarUsuario = async () => {
-
-        try{
-            const buscarUsuario = await BuscarUsuario();
-            if(!buscarUsuario){
-                alert('Usuário não encontrado');
-            }
-
-            console.log(buscarUsuario);
-            setUsuario(buscarUsuario);
-        }catch(err){
-            console.error("Erro ao buscar usuário:", err);
-        }finally{
-            setLoading(false);
-        }
-    }
-
-    const tranferencias = {
-
-
-        data: [
-            {
-                id: 1,
-                valor: 200.00,
-                DataTransferencia: '2023-09-01',
-                FirstName: 'Alex',
-                contaDestino: 'Pessoal'
-            },
-            {
-                id: 2,
-                valor: 150.00,
-                DataTransferencia: '2023-09-05',
-                FirstName: 'Luiz',
-                contaDestino: 'Empresarial'
-            },
-            {
-                id: 3,
-                valor: 1050.00,
-                DataTransferencia: '2023-09-05',
-                FirstName: 'Luiz',
-                contaDestino: 'Empresarial'
-            },
-            {
-                id: 4,
-                valor: 1050.00,
-                DataTransferencia: '2023-09-05',
-                FirstName: 'Luiz',
-                contaDestino: 'Empresarial'
-            }
-        ]
-    }
-
-
- return loading? 
-    <HomeSkeleton />
- :
-    (
+ return(
    <View style={styles.container}>
         <View style={styles.headerTitle}>
             <View style={{marginTop: areaSegura.top, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10}}>
-                <Text style={{ fontFamily: 'Oswald_700Bold' , color: Colors.Azul, fontSize: 20}}>Bem-Vindo, </Text>
-                <Text style={{ fontFamily: 'Oswald_700Bold' , color: Colors.Azul, fontSize: 20}}>{usuario.firstName}!</Text>
+                <Text style={{ fontFamily: 'Oswald_700Bold' , fontWeight: 'bold', color: Colors.Azul, fontSize: 20}}>Bem-Vindo, </Text>
+                <Skeleton width={200} height={20} />
             </View>
             <TouchableOpacity style={{marginTop: areaSegura.top, paddingVertical: 10}}>
                 <MaterialCommunityIcons name='bell-outline' size={28} color={Colors.Azul} />
@@ -101,12 +25,12 @@ export default function Home( { navigation }: Props ) {
         <View style={styles.headerBox}>
             <View style={{marginTop: 10}}>
                 <View>
-                    <Text style={{fontSize: 16, color: Colors.Branco}}>Conta: {usuario.contas[0].apelidoConta}</Text>
-                    <Text style={{fontSize: 16, color: Colors.Branco }}>Saldo: </Text>
+                    <Skeleton width={200} height={16} />
+                    <Skeleton width={200} height={16} />
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                     <Text style={{color: Colors.Branco, fontWeight: 'bold'}}>R$: </Text>
-                    <Text style={{fontSize: 28, color: Colors.Branco, fontWeight: 'bold'}}>{usuario.contas[0].saldo.toFixed(2)}</Text>
+                    <Skeleton width={100} height={28} />
                 </View>
             </View>
         </View>
@@ -114,7 +38,7 @@ export default function Home( { navigation }: Props ) {
         <View style={{marginTop: '20%', marginHorizontal: '5%'}}>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} >
 
-                        <TouchableOpacity style={styles.optionsMenu} onPress={ () => navigation.navigate('EnviarTransferencia')} >
+                        <TouchableOpacity style={styles.optionsMenu} >
                             <MaterialCommunityIcons name="cash-refund" size={42} color={Colors.Verde} />
                             <Text style={{textAlign: 'center', padding: 5}}>Enviar Transferência</Text>
                         </TouchableOpacity>
@@ -138,7 +62,7 @@ export default function Home( { navigation }: Props ) {
 
         </View>
 
-        <View style={{marginTop: '10%', marginHorizontal: '5%'}}>
+        <View style={{marginTop: '10%', marginHorizontal: '5%', gap: 8}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <Text>Transferências Recebidas no último mês</Text>
                 <TouchableOpacity>
@@ -146,23 +70,25 @@ export default function Home( { navigation }: Props ) {
                 </TouchableOpacity>
             </View>
 
-            <FlatList
-                data={tranferencias.data.slice(0, 3)}
-                renderItem={({ item }) => renderItem(item)}
-                keyExtractor={(item) => item.id.toString()}
-                style={{ marginTop: 10 }}
-            />
+            <Skeleton width={'100%'} height={70} />
+            <Skeleton width={'100%'} height={70} />
+            <Skeleton width={'100%'} height={70} />
+
+        </View>
+
+        <View style={{marginHorizontal: '5%', marginTop: 20, justifyContent: 'center'}}>
+            <Skeleton width={'100%'} height={150} />
 
         </View>
 
 
-        <View style={{marginHorizontal: '5%', backgroundColor: Colors.Branco, paddingVertical: 10, borderRadius: 8}}>
+        {/* <View style={{marginHorizontal: '5%', backgroundColor: Colors.Branco, paddingVertical: 10, borderRadius: 8}}>
             <Text style={{marginHorizontal: '5%'}}>Limite de Crédito Especial:</Text>
                 <View style={{marginVertical: 30, alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
                     <Text style={{fontSize: 14, color: '#b5b5b5b5', textAlign: 'center'}}>R$ </Text>
                     <Text style={{textAlign: 'center', fontSize: 32, fontWeight: 'bold'}}>27.000</Text>
                 </View>
-        </View>
+        </View> */}
 
 
 

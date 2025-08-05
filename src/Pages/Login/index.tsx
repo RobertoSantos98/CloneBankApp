@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { Colors } from '../../Utils/Colors';
 import { useState } from 'react';
 import { login } from '../../Services/AuthService';
@@ -32,7 +32,10 @@ export default function Login( {setLogado}: { setLogado: (value: boolean) => voi
   
  return (
    <View style={styles.container}>
-    <Text style={{ color: Colors.Branco, fontSize: 28, marginBottom: 20, fontWeight: 'bold' }}>Faça o Login</Text>
+    <View style={{backgroundColor: Colors.Branco, borderRadius: 150, borderWidth: 5,borderColor: Colors.Verde}}>
+      <Image source={require('../../Assets/image-1.png')} style={{width: 300, height: 300 }}/>
+    </View>
+    <Text style={{ color: Colors.Branco, fontSize: 28, marginVertical: 20, fontWeight: 'bold'}}>Faça o Login</Text>
      <TextInput placeholder="Email" style={styles.input} value={email} onChangeText={setEmail} />
      <TextInput placeholder="Senha" style={styles.input} secureTextEntry value={senha} onChangeText={setSenha} />
      {loading ? <ActivityIndicator color={Colors.Amarelo} size={36} /> : 
