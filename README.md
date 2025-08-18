@@ -1,5 +1,4 @@
 
-````markdown
 # CloneBankApp
 
 Um aplicativo mobile criado com **React Native + TypeScript**, inspirado em apps de banco digital. Desenvolvido como projeto de estudo e portfólio.
