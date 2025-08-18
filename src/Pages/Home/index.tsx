@@ -4,26 +4,21 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/StackNavigator';
-import { useState, useEffect  } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../../contexts/auth';
 
 import HomeSkeleton from './HomeSkeleton';
 import { BuscarUsuario } from '../../Services/UsuarioService';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
+
 export default function Home( { navigation }: Props ) {
     const areaSegura = useSafeAreaInsets();
+    const { logout } = useContext(AuthContext);
 
     const [ loading, setLoading ] = useState(true);
     const [ usuario, setUsuario ] = useState<any>(null);
-
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         setLoading(false)
-    //     },3000);
-
-    //     return () => clearTimeout(timer);
-    // }, [])
 
     useEffect(() => {
         buscarUsuario();
@@ -92,8 +87,9 @@ export default function Home( { navigation }: Props ) {
                 <Text style={{ fontFamily: 'Oswald_700Bold' , color: Colors.Azul, fontSize: 20}}>Bem-Vindo, </Text>
                 <Text style={{ fontFamily: 'Oswald_700Bold' , color: Colors.Azul, fontSize: 20}}>{usuario.firstName}!</Text>
             </View>
-            <TouchableOpacity style={{marginTop: areaSegura.top, paddingVertical: 10}}>
-                <MaterialCommunityIcons name='bell-outline' size={28} color={Colors.Azul} />
+            <TouchableOpacity style={{marginTop: areaSegura.top, paddingVertical: 10}} onPress={logout}>
+                <MaterialCommunityIcons name='logout' size={28} color={Colors.Azul} />
+                <Text style={{color: Colors.Azul}}>Sair</Text>
             </TouchableOpacity>
 
         </View>

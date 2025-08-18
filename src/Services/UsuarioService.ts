@@ -1,7 +1,6 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const SERVER: string = 'http://192.168.1.112:5211/api';
+import { SERVER } from "../config";
 
 export const BuscarUsuario = async () => {
     try {
